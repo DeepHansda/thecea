@@ -3,14 +3,15 @@ const BookModel = require("../db/models/book.model");
 module.exports = {
   addBook: async (req, res) => {
     try {
-      const { coverImg, title, desc, author, pages } = req.body;
-
+      const { title, desc, author, pages } = req.body;
+      console.log(req.file)
       const _book = new BookModel({
-        cover: coverImg,
+        // cover: coverImg,
         title: title,
         desc: desc,
         author: author,
         pages: pages,
+        createdBy: req.user,
       });
       await _book.save((err, result) => {
         if (err) {

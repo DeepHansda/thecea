@@ -10,6 +10,7 @@ const tokenHandler = async (res, statusCode, user) => {
   res.cookie("token", token, options).status(statusCode).json({
     success: 1,
     message: "success",
+    token,
     user,
   });
 };

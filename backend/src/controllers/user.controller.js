@@ -4,6 +4,7 @@ const { tokenHandler } = require("../utils/tokenHandler");
 module.exports = {
   signUp: async (req, res) => {
     try {
+      console.log(req.body);
       const { fullName, email, password } = req.body;
       if (!email || !password) {
         res.status(404).json({
@@ -18,16 +19,18 @@ module.exports = {
         password,
       });
 
-      await _user.save((error, user) => {
-        if (error) {
+      await _user
+        .save()
+        .then((user) => {
+          tokenHandler(res, 200, user);
+        })
+        .catch((error) => {
           console.log(error);
           res.status(404).json({
             status: 0,
             message: error.message,
           });
-        }
-        tokenHandler(res, 200, user);
-      });
+        });
     } catch (error) {
       console.log(error);
       res.status(404).json({
@@ -46,21 +49,26 @@ module.exports = {
         });
       }
 
-      await UserModel.findOne({ email }).exec((err, user) => {
-        if (err) {
+      await UserModel.findOne({ email })
+        .exec()
+        .then((user) => {
+          {
+            if (!user) {
+              res.status(404).json({
+                status: 0,
+                message: "User Doesn't Exist, Please SignUp.",
+              });
+            }
+            tokenHandler(res, 200, user);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
           res.status(404).json({
             status: 0,
             message: err.message,
           });
-        }
-        if (!user) {
-          res.status(404).json({
-            status: 0,
-            message: "User Doesn't Exist, Please SignUp.",
-          });
-        }
-        tokenHandler(res, 200, user);
-      });
+        });
     } catch (error) {
       console.log(error);
       res.status(404).json({
@@ -73,19 +81,18 @@ module.exports = {
   getUser: async (req, res) => {
     try {
       const { id } = req.params;
-      await UserModel.findById({ _id: id }).exec((err, result) => {
-        if (err) {
-          console.log(err);
-          res.status(404).json({
-            status: 0,
-            message: err.message,
-          });
-        }
+      await UserModel.findById({ _id: id }).exec().then((result)=>{
         res.status(200).json({
           status: 1,
           result,
         });
-      });
+      }).catch((err)=>{
+        console.log(err);
+        res.status(404).json({
+          status: 0,
+          message: err.message,
+        });
+      })
     } catch (error) {
       console.log(error);
     }

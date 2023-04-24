@@ -6,12 +6,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-
-
-
-
 const storage = multer.diskStorage({
-
   filename: (req, file, cb) => {
     cb(
       null,
@@ -21,7 +16,11 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype == "image/jpeg" || file.mimetype == "image/png" || file.mimetype == "image/webp") {
+  if (
+    file.mimetype == "image/jpeg" ||
+    file.mimetype == "image/png" ||
+    file.mimetype == "image/webp"
+  ) {
     cb(null, true);
   } else {
     cb({ message: "file format not supported" }, false);
@@ -30,9 +29,6 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-
-
 module.exports = {
   upload: upload,
-  cloudinaryUploads: cloudinaryUploads,
 };
