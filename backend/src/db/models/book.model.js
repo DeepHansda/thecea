@@ -23,10 +23,11 @@ const bookSchema = new Schema(
       require: true,
     },
     createdBy: {
-      _id: Types.ObjectId,
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );
 
-module.exports = model("book", bookSchema);
+module.exports = model("Book", bookSchema);

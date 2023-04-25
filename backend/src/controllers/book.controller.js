@@ -4,7 +4,7 @@ module.exports = {
   addBook: async (req, res) => {
     try {
       const { title, desc, author, pages } = req.body;
-      console.log(req.file)
+      console.log(req.file);
       const _book = new BookModel({
         // cover: coverImg,
         title: title,
@@ -13,20 +13,22 @@ module.exports = {
         pages: pages,
         createdBy: req.user,
       });
-      await _book.save((err, result) => {
-        if (err) {
+      await _book
+        .save()
+        .then((result) => {
+          res.status(200).json({
+            status: 1,
+            message: "Book Added!",
+            result,
+          });
+        })
+        .catch((err) => {
           console.log(err);
           res.status(404).json({
             status: 0,
             message: err.message,
           });
-        }
-        res.status(200).json({
-          status: 1,
-          message: "Book Added!",
-          result,
         });
-      });
     } catch (error) {
       console.log(error);
       res.status(404).json({
@@ -38,19 +40,22 @@ module.exports = {
 
   getBooks: async (req, res) => {
     try {
-      await BookModel.find().exec((err, result) => {
-        if (err) {
+      await BookModel.find()
+        .populate("createdBy")
+        .exec()
+        .then((result) => {
+          res.status(200).json({
+            status: 1,
+            result,
+          });
+        })
+        .catch((err) => {
           console.log(err);
           res.status(404).json({
             status: 0,
             message: err.message,
           });
-        }
-        res.status(200).json({
-          status: 1,
-          result,
         });
-      });
     } catch (error) {
       console.log(error);
       res.status(404).json({

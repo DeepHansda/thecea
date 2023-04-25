@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const connection = () => {
   const mongoURI = "mongodb://localhost:27017/thecea";
   const options = {
-    useUnifiedTopology: true,
     useNewUrlParser: true,
-    // useCreateIndex: true,
+    useUnifiedTopology: true,
+    // useFindAndModify: false
   };
   mongoose
     .connect(mongoURI, options)

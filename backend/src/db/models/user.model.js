@@ -43,4 +43,4 @@ userSchema.pre("save", async function (next) {
     return token;
   };
 
-module.exports = model("user", userSchema);
+module.exports = model("User", userSchema);

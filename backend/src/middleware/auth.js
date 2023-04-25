@@ -4,6 +4,7 @@ const UserModel = require('../db/models/user.model');
 const auth = async (req, res, next) => {
   try {
     const token = req.cookies.token;
+    console.log(req)
     console.log(token)
 
     if (typeof token == undefined) {
